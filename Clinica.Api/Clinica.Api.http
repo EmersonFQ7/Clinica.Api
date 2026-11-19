@@ -1,0 +1,152 @@
+@host = https://localhost:7269
+
+### ===== 200: GET médicos =====
+GET {{host}}/api/medicos
+
+### 200: GET con filtros
+GET {{host}}/api/medicos?especialidad=Cardiología&activo=true
+
+### 200: GET médico por id
+GET {{host}}/api/medicos/1
+
+### 200: ruta anidada (citas de un médico)
+GET {{host}}/api/medicos/1/citas
+
+### 200: GET citas con filtros
+GET {{host}}/api/citas?estado=Programada&medicoId=1
+
+### 200: GET cita por id
+GET {{host}}/api/citas/1
+
+### ===== 201: crear médico =====
+POST {{host}}/api/medicos
+Content-Type: application/json
+
+{
+  "nombre": "Rosa",
+  "apellido": "Mendoza",
+  "especialidad": "Neurología",
+  "email": "rmendoza@clinica.pe"
+}
+
+### ===== 201: crear cita (fecha futura) =====
+POST {{host}}/api/citas
+Content-Type: application/json
+
+{
+  "medicoId": 2,
+  "nombrePaciente": "Luis Rojas",
+  "dniPaciente": "45123789",
+  "fechaHora": "2026-12-15T09:00:00",
+  "motivo": "Control general"
+}
+
+### ===== 204: actualizar médico =====
+PUT {{host}}/api/medicos/2
+Content-Type: application/json
+
+{
+  "nombre": "Lucía",
+  "apellido": "Torres",
+  "especialidad": "Pediatría",
+  "email": "ltorres@clinica.pe",
+  "activo": true
+}
+
+### ===== 204: actualizar cita =====
+PUT {{host}}/api/citas/3
+Content-Type: application/json
+
+{
+  "medicoId": 2,
+  "nombrePaciente": "Pedro Quispe",
+  "dniPaciente": "70123456",
+  "fechaHora": "2026-12-16T11:00:00",
+  "motivo": "Vacunación reprogramada",
+  "estado": "Programada"
+}
+
+### ===== 400: DTO inválido (nombre vacío, email malo) =====
+POST {{host}}/api/medicos
+Content-Type: application/json
+
+{
+  "nombre": "",
+  "apellido": "Prueba",
+  "especialidad": "Cardiología",
+  "email": "no-es-un-email"
+}
+
+### 400: estado inválido en cita
+PUT {{host}}/api/citas/3
+Content-Type: application/json
+
+{
+  "medicoId": 2,
+  "nombrePaciente": "Pedro Quispe",
+  "dniPaciente": "70123456",
+  "fechaHora": "2026-12-16T11:00:00",
+  "estado": "Inventado"
+}
+
+### ===== 404: no existe =====
+GET {{host}}/api/medicos/999
+
+### 404: cita inexistente
+GET {{host}}/api/citas/999
+
+### 404: ruta anidada con médico inexistente
+GET {{host}}/api/medicos/999/citas
+
+### ===== 409: email duplicado =====
+POST {{host}}/api/medicos
+Content-Type: application/json
+
+{
+  "nombre": "Otro",
+  "apellido": "Ramírez",
+  "especialidad": "Cardiología",
+  "email": "cramirez@clinica.pe"
+}
+
+### 409: cita en fecha pasada
+POST {{host}}/api/citas
+Content-Type: application/json
+
+{
+  "medicoId": 1,
+  "nombrePaciente": "Test Pasado",
+  "dniPaciente": "12345678",
+  "fechaHora": "2020-01-01T10:00:00"
+}
+
+### 409: médico inactivo (Elena Soto, id 4)
+POST {{host}}/api/citas
+Content-Type: application/json
+
+{
+  "medicoId": 4,
+  "nombrePaciente": "Test Inactivo",
+  "dniPaciente": "12345678",
+  "fechaHora": "2026-12-20T10:00:00"
+}
+
+### 409: cruce de horario (misma hora que la cita creada arriba, médico 2)
+POST {{host}}/api/citas
+Content-Type: application/json
+
+{
+  "medicoId": 2,
+  "nombrePaciente": "Test Cruce",
+  "dniPaciente": "12345678",
+  "fechaHora": "2026-12-15T09:00:00"
+}
+
+### 409: eliminar médico con citas
+DELETE {{host}}/api/medicos/1
+
+### ===== 204: eliminar cita (cambia el id por el de la cita creada) =====
+DELETE {{host}}/api/citas/5
+
+### 204: eliminar médico sin citas (cambia el id por el de Rosa Mendoza)
+DELETE {{host}}/api/medicos/5

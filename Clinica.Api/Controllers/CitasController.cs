@@ -2,11 +2,15 @@ using Clinica.Entidades.Dtos;
 using Clinica.Entidades.Excepciones;
 using Clinica.Negocio.Servicios;
 using Microsoft.AspNetCore.Mvc;
+//semana 14
+using Clinica.Entidades;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Clinica.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CitasController : ControllerBase
 {
     private readonly ICitaServicio _servicio;
@@ -38,6 +42,7 @@ public class CitasController : ControllerBase
     }
 
     // POST api/citas
+    [Authorize(Roles = RolesClinica.Recepcionista + "," + RolesClinica.Director)]
     [HttpPost]
     [ProducesResponseType(typeof(CitaDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -56,6 +61,7 @@ public class CitasController : ControllerBase
     }
 
     // PUT api/citas/1
+    [Authorize(Roles = RolesClinica.Recepcionista + "," + RolesClinica.Director)]
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -76,6 +82,7 @@ public class CitasController : ControllerBase
     }
 
     // DELETE api/citas/1
+    [Authorize(Roles = RolesClinica.Director)]
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

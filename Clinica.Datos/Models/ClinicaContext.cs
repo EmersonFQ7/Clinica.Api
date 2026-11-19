@@ -15,6 +15,8 @@ public partial class ClinicaContext : DbContext
     public virtual DbSet<Cita> Citas { get; set; }
 
     public virtual DbSet<Medico> Medicos { get; set; }
+     //nuevo semna14
+    public virtual DbSet<Usuario> Usuarios { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

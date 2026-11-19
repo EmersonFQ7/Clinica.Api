@@ -150,3 +150,84 @@ DELETE {{host}}/api/citas/5
 
 ### 204: eliminar médico sin citas (cambia el id por el de Rosa Mendoza)
 DELETE {{host}}/api/medicos/5
+
+//SEMANA 14
+### ===== 200: login Director =====
+# @name loginDir
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "correo": "director@clinica.pe", "clave": "Clave123!" }
+
+### 200: login Recepcionista
+# @name loginRec
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "correo": "recepcion@clinica.pe", "clave": "Clave123!" }
+
+### 401: clave incorrecta
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "correo": "director@clinica.pe", "clave": "mala" }
+
+### 401: correo inexistente (misma respuesta)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "correo": "nadie@clinica.pe", "clave": "Clave123!" }
+
+### 201: registro (queda como Recepcionista)
+POST {{host}}/api/auth/registro
+Content-Type: application/json
+
+{ "correo": "nuevo@clinica.pe", "clave": "Clave123!" }
+
+### 409: correo repetido
+POST {{host}}/api/auth/registro
+Content-Type: application/json
+
+{ "correo": "nuevo@clinica.pe", "clave": "Clave123!" }
+
+### 400: registro inválido
+POST {{host}}/api/auth/registro
+Content-Type: application/json
+
+{ "correo": "malo", "clave": "123" }
+
+### 200: perfil con token
+GET {{host}}/api/auth/perfil
+Authorization: Bearer {{loginRec.response.body.token}}
+
+### 401: perfil sin token
+GET {{host}}/api/auth/perfil
+
+### 401: citas sin token
+GET {{host}}/api/citas
+
+### 200: citas con token Recepcionista
+GET {{host}}/api/citas
+Authorization: Bearer {{loginRec.response.body.token}}
+
+### 403: Recepcionista intenta crear médico
+POST {{host}}/api/medicos
+Authorization: Bearer {{loginRec.response.body.token}}
+Content-Type: application/json
+
+{ "nombre": "Test", "apellido": "Prueba", "especialidad": "Pediatría", "email": "t@clinica.pe" }
+
+### 201: Director crea médico
+POST {{host}}/api/medicos
+Authorization: Bearer {{loginDir.response.body.token}}
+Content-Type: application/json
+
+{ "nombre": "Test", "apellido": "Prueba", "especialidad": "Pediatría", "email": "t@clinica.pe" }
+
+### 403: Recepcionista intenta borrar cita
+DELETE {{host}}/api/citas/1
+Authorization: Bearer {{loginRec.response.body.token}}
+
+### 404 con token: médico inexistente
+GET {{host}}/api/medicos/999/citas
+Authorization: Bearer {{loginDir.response.body.token}}

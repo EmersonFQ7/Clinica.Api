@@ -2,11 +2,15 @@ using Clinica.Entidades.Dtos;
 using Clinica.Entidades.Excepciones;
 using Clinica.Negocio.Servicios;
 using Microsoft.AspNetCore.Mvc;
+//semana 14
+using Clinica.Entidades;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Clinica.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class MedicosController : ControllerBase
 {
     private readonly IMedicoServicio _medicoServicio;
@@ -19,6 +23,7 @@ public class MedicosController : ControllerBase
     }
 
     // GET api/medicos?especialidad=Cardiología&activo=true
+    [AllowAnonymous]
     [HttpGet]
     [ProducesResponseType(typeof(List<MedicoDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<MedicoDto>>> ObtenerTodos(
@@ -29,6 +34,7 @@ public class MedicosController : ControllerBase
     }
 
     // GET api/medicos/1
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(MedicoDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -51,6 +57,7 @@ public class MedicosController : ControllerBase
     }
 
     // POST api/medicos
+    [Authorize(Roles = RolesClinica.Director)]
     [HttpPost]
     [ProducesResponseType(typeof(MedicoDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -69,6 +76,7 @@ public class MedicosController : ControllerBase
     }
 
     // PUT api/medicos/1
+    [Authorize(Roles = RolesClinica.Director)]
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -89,6 +97,7 @@ public class MedicosController : ControllerBase
     }
 
     // DELETE api/medicos/1
+    [Authorize(Roles = RolesClinica.Director)]
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

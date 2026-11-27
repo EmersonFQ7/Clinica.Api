@@ -1,0 +1,53 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/auth/perfil",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/auth/perfil",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "clinica-api-emerson.runasp.net", "Port": 80 } ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer", "AllowedScopes": [] }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/auth/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "clinica-api-emerson.runasp.net", "Port": 80 } ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/medicos{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/medicos{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "clinica-api-emerson.runasp.net", "Port": 80 } ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/medicos{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/medicos{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "clinica-api-emerson.runasp.net", "Port": 80 } ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer", "AllowedScopes": [] }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/citas{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/citas{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "clinica-api-emerson.runasp.net", "Port": 80 } ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer", "AllowedScopes": [] }
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/pacientes{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/pacientes{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "clinica-pacientes-emerson.runasp.net", "Port": 80 } ],
+      "AuthenticationOptions": { "AuthenticationProviderKey": "Bearer", "AllowedScopes": [] }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://clinica-gateway-emerson.runasp.net"
+  }
+}

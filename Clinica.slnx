@@ -3,4 +3,6 @@
   <Project Path="Clinica.Datos/Clinica.Datos.csproj" />
   <Project Path="Clinica.Entidades/Clinica.Entidades.csproj" />
   <Project Path="Clinica.Negocio/Clinica.Negocio.csproj" />
+  <Project Path="Clinica.Pacientes/Clinica.Pacientes.csproj" />
+  <Project Path="GatewayApi/GatewayApi.csproj" />
 </Solution>

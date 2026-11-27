@@ -1,0 +1,66 @@
+@gw = http://localhost:5050
+
+### 200: login Director (público)
+# @name loginDir
+POST {{gw}}/gateway/auth/login
+Content-Type: application/json
+
+{ "correo": "director@clinica.pe", "clave": "Clave123!" }
+
+### 200: login Recepcionista
+# @name loginRec
+POST {{gw}}/gateway/auth/login
+Content-Type: application/json
+
+{ "correo": "recepcion@clinica.pe", "clave": "Clave123!" }
+
+### 401: login inválido
+POST {{gw}}/gateway/auth/login
+Content-Type: application/json
+
+{ "correo": "director@clinica.pe", "clave": "mala" }
+
+### 200: GET público de médicos, sin token
+GET {{gw}}/gateway/medicos
+
+### 200: GET médico por id, sin token
+GET {{gw}}/gateway/medicos/1
+
+### 401: crear médico sin token (lo corta el gateway)
+POST {{gw}}/gateway/medicos
+Content-Type: application/json
+
+{ "nombre": "Test", "apellido": "Gw", "especialidad": "Pediatría", "email": "gw@clinica.pe" }
+
+### 403: Recepcionista crea médico (lo corta tu API por el rol)
+POST {{gw}}/gateway/medicos
+Authorization: Bearer {{loginRec.response.body.token}}
+Content-Type: application/json
+
+{ "nombre": "Test", "apellido": "Gw", "especialidad": "Pediatría", "email": "gw@clinica.pe" }
+
+### 201: Director crea médico
+POST {{gw}}/gateway/medicos
+Authorization: Bearer {{loginDir.response.body.token}}
+Content-Type: application/json
+
+{ "nombre": "Test", "apellido": "Gw", "especialidad": "Pediatría", "email": "gw@clinica.pe" }
+
+### 200: citas con token
+GET {{gw}}/gateway/citas
+Authorization: Bearer {{loginRec.response.body.token}}
+
+### 401: pacientes sin token (microservicio 2)
+GET {{gw}}/gateway/pacientes
+
+### 200: pacientes con token
+GET {{gw}}/gateway/pacientes
+Authorization: Bearer {{loginRec.response.body.token}}
+
+### 200: paciente por id
+GET {{gw}}/gateway/pacientes/2
+Authorization: Bearer {{loginRec.response.body.token}}
+
+### 404: paciente inexistente
+GET {{gw}}/gateway/pacientes/999
+Authorization: Bearer {{loginRec.response.body.token}}

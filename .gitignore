@@ -480,3 +480,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Archivos de configuración de producción (no subir credenciales reales)
+appsettings.Production.json
+**/appsettings.Production.json
